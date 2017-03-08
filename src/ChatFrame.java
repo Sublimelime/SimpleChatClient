@@ -19,7 +19,7 @@ public class ChatFrame extends JFrame {
     private JTextArea txt_message = new JTextArea();
 
     private String userName = "";
-    private ArrayList<String> users = new ArrayList<String>();
+    private ArrayList<String> users = new ArrayList<>();
 
     public ChatFrame(String userName) {
         super("Chat Client");
@@ -56,21 +56,13 @@ public class ChatFrame extends JFrame {
         add(btn_send);
         add(btn_exit);
 
-        btn_exit.addActionListener(
-                new java.awt.event.ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                exit();
-            }
-        }
-        );
+        btn_exit.addActionListener((ActionEvent e) -> {
+            exit();
+        });
 
-        btn_send.addActionListener(
-                new java.awt.event.ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                sendtxt_message();
-            }
-        }
-        );
+        btn_send.addActionListener((ActionEvent e) -> {
+            sendtxt_message();
+        });
 
         setVisible(true);
     }

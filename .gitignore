@@ -2,3 +2,4 @@
 *.xml
 manifest.mf
 *.properties
+/build/
