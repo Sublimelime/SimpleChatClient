@@ -3,9 +3,20 @@ package client;
 import java.util.InputMismatchException;
 import javax.swing.JOptionPane;
 
+/**
+ * This is the client for my simple chat client.
+ *
+ * @author Noah Morton
+ *
+ * Date created: Mar 9, 2017
+ *
+ * Part of project: SimpleChatClient
+ */
 public class MainFile {
 
     public static void main(String[] args) {
+        //make connection and ping server
+
         String username = "";
         while (true) {
             try {
@@ -18,5 +29,6 @@ public class MainFile {
         }
 
         new ChatFrame(username);
+        //send join event to server
     }
 }

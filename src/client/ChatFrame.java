@@ -4,6 +4,15 @@ import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import javax.swing.*;
 
+/**
+ * This is the frame for my simple chat client.
+ *
+ * @author Noah Morton
+ *
+ * Date created: Mar 9, 2017
+ *
+ * Part of project: SimpleChatClient
+ */
 public class ChatFrame extends JFrame {
 
     private JButton btn_exit = new JButton("Exit");
