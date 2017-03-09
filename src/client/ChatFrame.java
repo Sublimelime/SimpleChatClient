@@ -2,6 +2,7 @@ package client;
 
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import javax.swing.*;
 
 /**
@@ -31,9 +32,20 @@ public class ChatFrame extends JFrame {
     private String userName = "";
     private ArrayList<String> users = new ArrayList<>();
 
-    public ChatFrame(String userName) {
+    public ChatFrame() {
         super("Chat Client");
-        this.userName = userName;
+        //make connection and ping server
+
+        String username = "";
+        while (true) {
+            try {
+                username = JOptionPane.showInputDialog("Please provide a valid, and unique username.");
+            } catch (InputMismatchException e) {
+                System.out.println("Username is invalid.");
+            }
+            //todo code to check if the username is already used
+            break;
+        }
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(800, 800);

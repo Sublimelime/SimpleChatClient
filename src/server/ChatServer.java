@@ -33,9 +33,6 @@ public class ChatServer implements Runnable {
         Thread t = new Thread(this);
         t.start();
 
-        while (true) {
-
-        }
     }
 
     @Override
