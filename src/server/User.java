@@ -17,15 +17,15 @@ public class User {
 
     private Socket socket;
     private String username;
-    private InputStream input;
-    private OutputStream output;
+    private ObjectInputStream input;
+    private ObjectOutputStream output;
 
     public User(String username, Socket socket) {
         try {
             this.socket = socket;
             this.username = username;
-            this.input = socket.getInputStream();
-            this.output = socket.getOutputStream();
+            this.input = new ObjectInputStream(socket.getInputStream());
+            this.output = new ObjectOutputStream(socket.getOutputStream());
         } catch (UnknownHostException h) {
             System.out.println("Unknown host exception.");
             h.printStackTrace();
