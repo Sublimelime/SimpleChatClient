@@ -1,3 +1,4 @@
+package client;
 
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
@@ -57,7 +58,7 @@ public class ChatFrame extends JFrame {
         add(btn_exit);
 
         btn_exit.addActionListener((ActionEvent e) -> {
-            exit();
+            System.exit(0);
         });
 
         btn_send.addActionListener((ActionEvent e) -> {
@@ -65,10 +66,6 @@ public class ChatFrame extends JFrame {
         });
 
         setVisible(true);
-    }
-
-    public void exit() {
-        System.exit(0);
     }
 
     public void sendtxt_message() {
