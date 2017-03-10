@@ -122,7 +122,7 @@ public class ChatFrame extends JFrame implements Runnable {
                     users.remove(receivedItems[1]);
                     System.out.println(receivedItems[1] + " left.");
                 } else if (receivedItems[0].equals("M")) {
-                    txt_chatBox.append(receivedItems[1] + ":" + receivedItems[2] + "\n");
+                    txt_chatBox.append(receivedItems[1] + ": " + receivedItems[2] + "\n");
                 }
             } catch (IOException ignored) {
             } catch (ClassNotFoundException ignored) {

@@ -49,6 +49,7 @@ public class ChatServer implements Runnable {
                 socket1 = serverSocket.accept();
                 is = new ObjectInputStream(socket1.getInputStream());
                 currentUsers.add(new User(is.readObject().toString(), socket1));
+                userListeners.add(new UserListener((is)));
             } catch (IOException ignored) {
             } catch (ClassNotFoundException ignored) {
             }
