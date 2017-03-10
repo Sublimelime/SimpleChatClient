@@ -17,8 +17,9 @@ import java.util.ArrayList;
  */
 public class ChatServer implements Runnable {
 
-    ArrayList<User> currentUsers = new ArrayList<>();
-    ServerSocket serverSocket;
+    private static ArrayList<User> currentUsers = new ArrayList<>();
+    private ArrayList<UserListener> userListeners = new ArrayList<>();
+    private ServerSocket serverSocket;
 
     public ChatServer() {
 
@@ -54,4 +55,9 @@ public class ChatServer implements Runnable {
 
         }
     }
+
+    public static ArrayList<User> getCurrentUsers() {
+        return currentUsers;
+    }
+
 }

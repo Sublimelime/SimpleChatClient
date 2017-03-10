@@ -115,7 +115,15 @@ public class ChatFrame extends JFrame implements Runnable {
             try {
                 String received = input.readObject().toString();
                 String[] receivedItems = received.split("[`]"); //creates an array with the type of message, user, and message
-
+                if (receivedItems[0].equals("J")) {
+                    users.add(receivedItems[1]);
+                    System.out.println(receivedItems[1] + " joined.");
+                } else if (receivedItems[0].equals("L")) {
+                    users.remove(receivedItems[1]);
+                    System.out.println(receivedItems[1] + " left.");
+                } else if (receivedItems[0].equals("M")) {
+                    txt_chatBox.append(receivedItems[1] + ":" + receivedItems[2] + "\n");
+                }
             } catch (IOException ignored) {
             } catch (ClassNotFoundException ignored) {
             }
