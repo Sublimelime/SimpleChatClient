@@ -32,6 +32,9 @@ public class ChatServer implements Runnable {
         System.out.println("Init server, waiting for connections.");
         Thread t = new Thread(this);
         t.start();
+        while (true) {
+
+        }
 
     }
 
@@ -45,7 +48,8 @@ public class ChatServer implements Runnable {
                 socket1 = serverSocket.accept();
                 is = new ObjectInputStream(socket1.getInputStream());
                 currentUsers.add(new User(is.readObject().toString(), socket1));
-            } catch (Exception ignored) {
+            } catch (IOException ignored) {
+            } catch (ClassNotFoundException ignored) {
             }
 
         }

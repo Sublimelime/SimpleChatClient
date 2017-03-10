@@ -1,6 +1,9 @@
 package client;
 
 import java.awt.event.ActionEvent;
+import java.io.*;
+import java.net.Socket;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import javax.swing.*;
@@ -14,7 +17,7 @@ import javax.swing.*;
  *
  * Part of project: SimpleChatClient
  */
-public class ChatFrame extends JFrame {
+public class ChatFrame extends JFrame implements Runnable {
 
     private JButton btn_exit = new JButton("Exit");
     private JButton btn_send = new JButton("Send");
@@ -32,9 +35,20 @@ public class ChatFrame extends JFrame {
     private String userName = "";
     private ArrayList<String> users = new ArrayList<>();
 
+    ObjectInputStream input;
+    ObjectOutputStream output;
+    Socket socket;
+
     public ChatFrame() {
         super("Chat Client");
         //make connection and ping server
+        try {
+            this.socket = new Socket("127.0.0.1", 1337);
+            input = new ObjectInputStream(socket.getInputStream());
+            output = new ObjectOutputStream(socket.getOutputStream());
+        } catch (UnknownHostException e) {
+        } catch (IOException c) {
+        }
 
         String username = "";
         while (true) {
@@ -93,4 +107,19 @@ public class ChatFrame extends JFrame {
         String m = userName + ": " + txt_message.getText();
         txt_chatBox.append(m + "\n");
     }
+
+    @Override
+    public void run() {
+        //todo continually listen
+        while (true) {
+            try {
+                String received = input.readObject().toString();
+                String[] receivedItems = received.split("[`]"); //creates an array with the type of message, user, and message
+
+            } catch (IOException ignored) {
+            } catch (ClassNotFoundException ignored) {
+            }
+        }
+    }
+
 }
