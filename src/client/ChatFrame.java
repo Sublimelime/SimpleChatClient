@@ -51,20 +51,33 @@ public class ChatFrame extends JFrame implements Runnable {
         }
 
         String username = "";
-        while (true) {
+        while (username.isEmpty()) {
             try {
                 username = JOptionPane.showInputDialog("Please provide a valid, and unique username.");
             } catch (InputMismatchException e) {
                 System.out.println("Username is invalid.");
+                continue;
             }
-            //todo code to check if the username is already used
-            break;
+            //code to check if the username is already used
+            for (String user : users) {
+                if (user.equals(username)) {
+                    System.out.println("Username is taken. Try again.");
+                } else {
+                    username = "";
+                }
+            }
         }
+        userName = username;
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(800, 800);
 
-        users.add(userName);
+        users.add(userName); //add ourselves to the list
+        try { //give the server our username
+            output.writeObject(username);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         list_users.setListData(users.toArray());
         list_users.setEnabled(false);
@@ -106,6 +119,7 @@ public class ChatFrame extends JFrame implements Runnable {
     public void sendtxt_message() {
         String m = userName + ": " + txt_message.getText();
         txt_chatBox.append(m + "\n");
+        //todo send the message back to the server
     }
 
     @Override
@@ -117,9 +131,11 @@ public class ChatFrame extends JFrame implements Runnable {
                 String[] receivedItems = received.split("[`]"); //creates an array with the type of message, user, and message
                 if (receivedItems[0].equals("J")) {
                     users.add(receivedItems[1]);
+                    list_users.setListData(users.toArray());
                     System.out.println(receivedItems[1] + " joined.");
                 } else if (receivedItems[0].equals("L")) {
                     users.remove(receivedItems[1]);
+                    list_users.setListData(users.toArray());
                     System.out.println(receivedItems[1] + " left.");
                 } else if (receivedItems[0].equals("M")) {
                     txt_chatBox.append(receivedItems[1] + ": " + receivedItems[2] + "\n");

@@ -41,11 +41,11 @@ public class User implements Runnable {
         return username;
     }
 
-    public InputStream getInput() {
+    public ObjectInputStream getInput() {
         return input;
     }
 
-    public OutputStream getOutput() {
+    public ObjectOutputStream getOutput() {
         return output;
     }
 
@@ -55,21 +55,27 @@ public class User implements Runnable {
             String received = input.readObject().toString();
 
             String[] receivedItems = received.split("[`]"); //creates an array with the type of message, user, and message
-            if (receivedItems[0].equals("M")) {
-                for (User u : ChatServer.getCurrentUsers()) {
-                    //send the received message to everyone
-                    u.output.writeObject("M`" + receivedItems[1] + "`" + receivedItems[2]);
-                }
-            } else if (receivedItems[0].equals("L")) {
-                for (User u : ChatServer.getCurrentUsers()) {
-                    //send the received message to everyone
-                    u.output.writeObject("L`" + receivedItems[1] + "`" + "none");
-                }
-            } else if (receivedItems[0].equals("J")) {
-                for (User u : ChatServer.getCurrentUsers()) {
-                    //send the received message to everyone
-                    u.output.writeObject("J`" + receivedItems[1] + "`" + "none");
-                }
+            switch (receivedItems[0]) {
+                case "M":
+                    for (User u : ChatServer.getCurrentUsers()) {
+                        //send the received message to everyone
+                        u.output.writeObject("M`" + receivedItems[1] + "`" + receivedItems[2]);
+                    }
+                    break;
+                case "L":
+                    for (User u : ChatServer.getCurrentUsers()) {
+                        //send the received message to everyone
+                        u.output.writeObject("L`" + receivedItems[1] + "`" + "none");
+                    }
+                    break;
+                case "J":
+                    for (User u : ChatServer.getCurrentUsers()) {
+                        //send the received message to everyone
+                        u.output.writeObject("J`" + receivedItems[1] + "`" + "none");
+                    }
+                    break;
+                default:
+                    break;
             }
         } catch (Exception ignored) {
         }

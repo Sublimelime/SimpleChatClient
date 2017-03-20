@@ -47,7 +47,12 @@ public class ChatServer implements Runnable {
             try {
                 socket1 = serverSocket.accept();
                 is = new ObjectInputStream(socket1.getInputStream());
-                currentUsers.add(new User(is.readObject().toString(), socket1));
+                String username = is.readObject().toString();
+
+                for (User u : ChatServer.getCurrentUsers()) { //tell all users that a user just joined
+                    u.getOutput().writeObject("J`" + username + "`" + "none");
+                }
+                currentUsers.add(new User(username, socket1));
             } catch (IOException ignored) {
             } catch (ClassNotFoundException ignored) {
             }
