@@ -18,7 +18,6 @@ import java.util.ArrayList;
 public class ChatServer implements Runnable {
 
     private static ArrayList<User> currentUsers = new ArrayList<>();
-    private ArrayList<UserListener> userListeners = new ArrayList<>();
     private ServerSocket serverSocket;
 
     public ChatServer() {
@@ -49,11 +48,9 @@ public class ChatServer implements Runnable {
                 socket1 = serverSocket.accept();
                 is = new ObjectInputStream(socket1.getInputStream());
                 currentUsers.add(new User(is.readObject().toString(), socket1));
-                userListeners.add(new UserListener((is)));
             } catch (IOException ignored) {
             } catch (ClassNotFoundException ignored) {
             }
-
         }
     }
 

@@ -13,7 +13,7 @@ import java.net.UnknownHostException;
  *
  * Part of project: SimpleChatClient
  */
-public class User {
+public class User implements Runnable {
 
     private Socket socket;
     private String username;
@@ -33,6 +33,8 @@ public class User {
             System.out.println("Cannot connect to server.");
             i.printStackTrace();
         }
+        Thread t = new Thread(this);
+        t.start();
     }
 
     public String getUsername() {
@@ -47,4 +49,29 @@ public class User {
         return output;
     }
 
+    @Override
+    public void run() {
+        try {
+            String received = input.readObject().toString();
+
+            String[] receivedItems = received.split("[`]"); //creates an array with the type of message, user, and message
+            if (receivedItems[0].equals("M")) {
+                for (User u : ChatServer.getCurrentUsers()) {
+                    //send the received message to everyone
+                    u.output.writeObject("M`" + receivedItems[1] + "`" + receivedItems[2]);
+                }
+            } else if (receivedItems[0].equals("L")) {
+                for (User u : ChatServer.getCurrentUsers()) {
+                    //send the received message to everyone
+                    u.output.writeObject("L`" + receivedItems[1] + "`" + "none");
+                }
+            } else if (receivedItems[0].equals("J")) {
+                for (User u : ChatServer.getCurrentUsers()) {
+                    //send the received message to everyone
+                    u.output.writeObject("J`" + receivedItems[1] + "`" + "none");
+                }
+            }
+        } catch (Exception ignored) {
+        }
+    }
 }
