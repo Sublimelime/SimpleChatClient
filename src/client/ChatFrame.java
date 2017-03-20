@@ -42,6 +42,7 @@ public class ChatFrame extends JFrame implements Runnable {
     public ChatFrame() {
         super("Chat Client");
         //make connection and ping server
+        System.out.println("Making connection...");
         try {
             this.socket = new Socket("127.0.0.1", 1337);
             input = new ObjectInputStream(socket.getInputStream());
@@ -53,6 +54,7 @@ public class ChatFrame extends JFrame implements Runnable {
         String username = "";
         while (username.isEmpty()) {
             try {
+                System.out.println("Getting username.");
                 username = JOptionPane.showInputDialog("Please provide a valid, and unique username.");
             } catch (InputMismatchException e) {
                 System.out.println("Username is invalid.");
