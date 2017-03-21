@@ -50,7 +50,7 @@ public class ChatFrame extends JFrame implements Runnable {
         } catch (UnknownHostException e) {
         } catch (IOException c) {
         }
-
+        System.out.println("Made connection.");
         String username = "";
         while (username.isEmpty()) {
             try {
@@ -122,6 +122,13 @@ public class ChatFrame extends JFrame implements Runnable {
         String m = userName + ": " + txt_message.getText();
         txt_chatBox.append(m + "\n");
         //todo send the message back to the server
+        try {
+            output.writeObject(m);
+            txt_message.setText(""); //empty the chat box
+        } catch (IOException e) {
+            System.out.println("Failed to send message.");
+            e.printStackTrace();
+        }
     }
 
     @Override
