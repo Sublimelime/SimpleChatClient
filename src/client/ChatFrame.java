@@ -70,7 +70,6 @@ public class ChatFrame extends JFrame implements Runnable {
             }
         }
         userName = username;
-
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(800, 800);
 

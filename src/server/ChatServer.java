@@ -42,18 +42,20 @@ public class ChatServer implements Runnable {
     public void run() {
         while (true) { //keeps getting connections, adds them to the list of users
             System.out.println("Waiting for incoming connections.");
-            Socket socket1;
+            Socket incomingSocket;
             ObjectInputStream is;
             try {
-                socket1 = serverSocket.accept();
-                is = new ObjectInputStream(socket1.getInputStream());
+                incomingSocket = serverSocket.accept();
+                is = new ObjectInputStream(incomingSocket.getInputStream());
                 String username = is.readObject().toString();
+                System.out.println("Got connection, name is " + username);
 
                 for (User u : ChatServer.getCurrentUsers()) { //tell all users that a user just joined
                     u.getOutput().writeObject("J`" + username + "`" + "none");
                     u.getOutput().reset();
                 }
-                currentUsers.add(new User(username, socket1));
+                currentUsers.add(new User(username, incomingSocket));
+                System.out.println("Added the user to the list of users.");
             } catch (IOException ignored) {
             } catch (ClassNotFoundException ignored) {
             }
