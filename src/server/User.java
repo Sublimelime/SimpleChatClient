@@ -60,18 +60,21 @@ public class User implements Runnable {
                     for (User u : ChatServer.getCurrentUsers()) {
                         //send the received message to everyone
                         u.output.writeObject("M`" + receivedItems[1] + "`" + receivedItems[2]);
+                        u.output.reset();
                     }
                     break;
                 case "L":
                     for (User u : ChatServer.getCurrentUsers()) {
                         //send the received message to everyone
                         u.output.writeObject("L`" + receivedItems[1] + "`" + "none");
+                        u.output.reset();
                     }
                     break;
                 case "J":
                     for (User u : ChatServer.getCurrentUsers()) {
                         //send the received message to everyone
                         u.output.writeObject("J`" + receivedItems[1] + "`" + "none");
+                        u.output.reset();
                     }
                     break;
                 default:

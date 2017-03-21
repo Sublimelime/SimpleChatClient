@@ -135,13 +135,13 @@ public class ChatFrame extends JFrame implements Runnable {
                     case "J":
                         users.add(receivedItems[1]);
                         list_users.setListData(users.toArray());
-                        txt_chatBox.append(receivedItems[1] + ": " + receivedItems[2] + "joined.\n");
+                        txt_chatBox.append(receivedItems[1] + "joined.\n");
                         System.out.println(receivedItems[1] + " joined.");
                         break;
                     case "L":
                         users.remove(receivedItems[1]);
                         list_users.setListData(users.toArray());
-                        txt_chatBox.append(receivedItems[1] + ": " + receivedItems[2] + "left.\n");
+                        txt_chatBox.append(receivedItems[1] + "left.\n");
                         System.out.println(receivedItems[1] + " left.");
                         break;
                     case "M":

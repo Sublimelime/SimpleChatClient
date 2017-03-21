@@ -51,6 +51,7 @@ public class ChatServer implements Runnable {
 
                 for (User u : ChatServer.getCurrentUsers()) { //tell all users that a user just joined
                     u.getOutput().writeObject("J`" + username + "`" + "none");
+                    u.getOutput().reset();
                 }
                 currentUsers.add(new User(username, socket1));
             } catch (IOException ignored) {
