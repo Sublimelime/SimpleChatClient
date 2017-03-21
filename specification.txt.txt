@@ -1,3 +1,0 @@
-Types of messages
-
-type`user`message
