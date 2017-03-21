@@ -126,26 +126,32 @@ public class ChatFrame extends JFrame implements Runnable {
 
     @Override
     public void run() {
-        //todo continually listen
+        //continually listen
         while (true) {
             try {
                 String received = input.readObject().toString();
                 String[] receivedItems = received.split("[`]"); //creates an array with the type of message, user, and message
-                if (receivedItems[0].equals("J")) {
-                    users.add(receivedItems[1]);
-                    list_users.setListData(users.toArray());
-                    System.out.println(receivedItems[1] + " joined.");
-                } else if (receivedItems[0].equals("L")) {
-                    users.remove(receivedItems[1]);
-                    list_users.setListData(users.toArray());
-                    System.out.println(receivedItems[1] + " left.");
-                } else if (receivedItems[0].equals("M")) {
-                    txt_chatBox.append(receivedItems[1] + ": " + receivedItems[2] + "\n");
+                switch (receivedItems[0]) {
+                    case "J":
+                        users.add(receivedItems[1]);
+                        list_users.setListData(users.toArray());
+                        txt_chatBox.append(receivedItems[1] + ": " + receivedItems[2] + "joined.\n");
+                        System.out.println(receivedItems[1] + " joined.");
+                        break;
+                    case "L":
+                        users.remove(receivedItems[1]);
+                        list_users.setListData(users.toArray());
+                        txt_chatBox.append(receivedItems[1] + ": " + receivedItems[2] + "left.\n");
+                        System.out.println(receivedItems[1] + " left.");
+                        break;
+                    case "M":
+                        txt_chatBox.append(receivedItems[1] + ": " + receivedItems[2] + "\n");
+                        break;
+                    default:
+                        break;
                 }
-            } catch (IOException ignored) {
-            } catch (ClassNotFoundException ignored) {
+            } catch (IOException | ClassNotFoundException ignored) {
             }
         }
     }
-
 }
