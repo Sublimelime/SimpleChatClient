@@ -19,21 +19,21 @@ import javax.swing.*;
  */
 public class ChatFrame extends JFrame implements Runnable {
 
-    private JButton btn_exit = new JButton("Exit");
-    private JButton btn_send = new JButton("Send");
+    private JButton btn_exit;
+    private JButton btn_send;
 
-    private JLabel lbl_users = new JLabel("Users:");
-    private JList list_users = new JList();
+    private JLabel lbl_users;
+    private JList list_users;
 
-    private JLabel lbl_chatBox = new JLabel("Messages:");
-    private JScrollPane scr_chatBox = null;
-    private JTextArea txt_chatBox = new JTextArea();
+    private JLabel lbl_chatBox;
+    private JScrollPane scr_chatBox;
+    private JTextArea txt_chatBox;
 
-    private JLabel lbl_message = new JLabel("Enter Message:");
-    private JTextArea txt_message = new JTextArea();
+    private JLabel lbl_message;
+    private JTextArea txt_message;
 
     private final String userName;
-    private ArrayList<String> users = new ArrayList<>();
+    private ArrayList<String> users;
 
     ObjectInputStream input;
     ObjectOutputStream output;
@@ -41,6 +41,16 @@ public class ChatFrame extends JFrame implements Runnable {
 
     public ChatFrame() {
         super("Chat Client");
+        this.users = new ArrayList<>();
+        this.btn_send = new JButton("Send");
+        this.btn_exit = new JButton("Exit");
+        this.list_users = new JList();
+        this.lbl_users = new JLabel("Users:");
+        this.lbl_chatBox = new JLabel("Messages:");
+        this.scr_chatBox = null;
+        this.txt_chatBox = new JTextArea();
+        this.txt_message = new JTextArea();
+        this.lbl_message = new JLabel("Enter Message:");
         //make connection and ping server
         System.out.println("Making connection...");
         try {

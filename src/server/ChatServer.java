@@ -39,9 +39,10 @@ public class ChatServer implements Runnable {
             System.out.println("Waiting for incoming connections.");
             Socket incomingSocket;
             ObjectInputStream is;
+            ObjectOutputStream os;
             try {
                 incomingSocket = serverSocket.accept();
-                ObjectOutputStream os = new ObjectOutputStream(incomingSocket.getOutputStream());
+                os = new ObjectOutputStream(incomingSocket.getOutputStream());
                 is = new ObjectInputStream(incomingSocket.getInputStream());
                 String username = is.readObject().toString();
                 System.out.println("Got connection, name is " + username);
