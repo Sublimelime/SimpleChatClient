@@ -80,7 +80,7 @@ public class User implements Runnable {
                 default:
                     break;
             }
-        } catch (Exception ignored) {
+        } catch (IOException | ClassNotFoundException ignored) {
         }
     }
 }

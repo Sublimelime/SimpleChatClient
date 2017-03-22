@@ -125,7 +125,7 @@ public class ChatFrame extends JFrame implements Runnable {
         setVisible(true);
     }
 
-    public void sendtxt_message() {
+    private void sendtxt_message() {
         String m = userName + ": " + txt_message.getText();
         txt_chatBox.append(m + "\n");
         //todo send the message back to the server
@@ -143,28 +143,34 @@ public class ChatFrame extends JFrame implements Runnable {
         //continually listen
         while (true) {
             try {
-                String received = input.readObject().toString();
-                String[] receivedItems = received.split("[`]"); //creates an array with the type of message, user, and message
-                switch (receivedItems[0]) {
-                    case "J":
-                        users.add(receivedItems[1]);
-                        list_users.setListData(users.toArray());
-                        txt_chatBox.append(receivedItems[1] + " joined.\n");
-                        System.out.println(receivedItems[1] + " joined.");
-                        break;
-                    case "L":
-                        users.remove(receivedItems[1]);
-                        list_users.setListData(users.toArray());
-                        txt_chatBox.append(receivedItems[1] + " left.\n");
-                        System.out.println(receivedItems[1] + " left.");
-                        break;
-                    case "M":
-                        txt_chatBox.append(receivedItems[1] + ": " + receivedItems[2] + "\n");
-                        break;
-                    default:
-                        break;
+                Object received = input.readObject();
+                if (received instanceof String) {
+                    String[] receivedItems = received.toString().split("[`]"); //creates an array with the type of message, user, and message
+                    switch (receivedItems[0]) {
+                        case "J":
+                            users.add(receivedItems[1]);
+                            list_users.setListData(users.toArray());
+                            txt_chatBox.append(receivedItems[1] + " joined.\n");
+                            System.out.println(receivedItems[1] + " joined.");
+                            break;
+                        case "L":
+                            users.remove(receivedItems[1]);
+                            list_users.setListData(users.toArray());
+                            txt_chatBox.append(receivedItems[1] + " left.\n");
+                            System.out.println(receivedItems[1] + " left.");
+                            break;
+                        case "M":
+                            txt_chatBox.append(receivedItems[1] + ": " + receivedItems[2] + "\n");
+                            break;
+                        default:
+                            break;
+                    }
+                } else if (received instanceof ArrayList) {
+                    users = (ArrayList<String>) received;
+                    list_users.setListData(users.toArray());
                 }
-            } catch (IOException | ClassNotFoundException ignored) {
+            } catch (IOException | ClassNotFoundException r) {
+                r.printStackTrace();
             }
         }
     }

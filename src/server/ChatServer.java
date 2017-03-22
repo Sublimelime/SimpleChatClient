@@ -16,7 +16,7 @@ import java.util.ArrayList;
  */
 public class ChatServer implements Runnable {
 
-    private static ArrayList<User> currentUsers = new ArrayList<>();
+    private static final ArrayList<User> currentUsers = new ArrayList<>();
     private ServerSocket serverSocket;
 
     public ChatServer() {
@@ -41,18 +41,27 @@ public class ChatServer implements Runnable {
             ObjectInputStream is;
             try {
                 incomingSocket = serverSocket.accept();
-                ObjectOutputStream os = new ObjectOutputStream(incomingSocket.getOutputStream()); //not used, just let client move
+                ObjectOutputStream os = new ObjectOutputStream(incomingSocket.getOutputStream());
                 is = new ObjectInputStream(incomingSocket.getInputStream());
                 String username = is.readObject().toString();
                 System.out.println("Got connection, name is " + username);
 
-                for (User u : ChatServer.getCurrentUsers()) { //tell all users that a user just joined
+                if (!currentUsers.isEmpty()) { //build a list of usernames and send it
+                    ArrayList<String> currentUsernames = new ArrayList<>();
+                    currentUsers.forEach((u) -> {
+                        currentUsernames.add(u.getUsername());
+                    });
+                    os.writeObject(currentUsernames);
+                }
+
+                for (User u : currentUsers) { //tell all users that a user just joined
                     u.getOutput().writeObject("J`" + username + "`" + "none");
                     u.getOutput().reset();
                 }
                 currentUsers.add(new User(username, incomingSocket));
                 System.out.println("Added the user to the list of users.");
-            } catch (IOException | ClassNotFoundException ignored) {
+            } catch (IOException | ClassNotFoundException t) {
+                t.printStackTrace();
             }
         }
     }
