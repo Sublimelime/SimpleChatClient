@@ -1,8 +1,6 @@
 package server;
 
 import java.io.*;
-import java.net.Socket;
-import java.net.UnknownHostException;
 
 /**
  * This is a class to hold an active connection.
@@ -15,24 +13,15 @@ import java.net.UnknownHostException;
  */
 public class User implements Runnable {
 
-    private Socket socket;
-    private String username;
-    private ObjectInputStream input;
-    private ObjectOutputStream output;
+    private final String username;
+    private final ObjectInputStream input;
+    private final ObjectOutputStream output;
 
-    public User(String username, Socket socket) {
-        try {
-            this.socket = socket;
-            this.username = username;
-            this.input = new ObjectInputStream(socket.getInputStream());
-            this.output = new ObjectOutputStream(socket.getOutputStream());
-        } catch (UnknownHostException h) {
-            System.out.println("Unknown host exception.");
-            h.printStackTrace();
-        } catch (IOException i) {
-            System.out.println("Cannot connect to server.");
-            i.printStackTrace();
-        }
+    public User(String username, ObjectInputStream input, ObjectOutputStream output) {
+        this.username = username;
+        this.input = input;
+        this.output = output;
+
         Thread t = new Thread(this);
         t.start();
     }

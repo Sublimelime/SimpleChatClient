@@ -52,13 +52,15 @@ public class ChatServer implements Runnable {
                         currentUsernames.add(u.getUsername());
                     });
                     os.writeObject(currentUsernames);
-                }
+                    System.out.println("Sent list of users to new user.");
 
-                for (User u : currentUsers) { //tell all users that a user just joined
-                    u.getOutput().writeObject("J`" + username + "`" + "none");
-                    u.getOutput().reset();
+                    for (User u : currentUsers) { //tell all users that a user just joined
+                        u.getOutput().writeObject("J`" + username + "`" + "none");
+                        u.getOutput().reset();
+                    }
+                    System.out.println("Told all existing users about the new connection.");
                 }
-                currentUsers.add(new User(username, incomingSocket));
+                currentUsers.add(new User(username, is, os));
                 System.out.println("Added the user to the list of users.");
             } catch (IOException | ClassNotFoundException t) {
                 t.printStackTrace();
