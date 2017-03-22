@@ -32,7 +32,7 @@ public class ChatFrame extends JFrame implements Runnable {
     private JLabel lbl_message = new JLabel("Enter Message:");
     private JTextArea txt_message = new JTextArea();
 
-    private String userName = "";
+    private final String userName;
     private ArrayList<String> users = new ArrayList<>();
 
     ObjectInputStream input;
@@ -80,6 +80,8 @@ public class ChatFrame extends JFrame implements Runnable {
             e.printStackTrace();
         }
 
+        txt_chatBox.append(username + " joined.\n");
+
         list_users.setListData(users.toArray());
         list_users.setEnabled(false);
         lbl_users.setBounds(640, 30, 130, 20);
@@ -107,6 +109,12 @@ public class ChatFrame extends JFrame implements Runnable {
         add(btn_exit);
 
         btn_exit.addActionListener((ActionEvent e) -> {
+            try {
+                output.writeObject("L`" + userName + "`none");
+            } catch (IOException g) {
+                System.err.println("Unable to send leaving message, sorry.");
+                System.exit(0);
+            }
             System.exit(0);
         });
 
@@ -141,13 +149,13 @@ public class ChatFrame extends JFrame implements Runnable {
                     case "J":
                         users.add(receivedItems[1]);
                         list_users.setListData(users.toArray());
-                        txt_chatBox.append(receivedItems[1] + "joined.\n");
+                        txt_chatBox.append(receivedItems[1] + " joined.\n");
                         System.out.println(receivedItems[1] + " joined.");
                         break;
                     case "L":
                         users.remove(receivedItems[1]);
                         list_users.setListData(users.toArray());
-                        txt_chatBox.append(receivedItems[1] + "left.\n");
+                        txt_chatBox.append(receivedItems[1] + " left.\n");
                         System.out.println(receivedItems[1] + " left.");
                         break;
                     case "M":

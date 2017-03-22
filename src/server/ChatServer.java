@@ -1,7 +1,6 @@
 package server;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
+import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -32,10 +31,6 @@ public class ChatServer implements Runnable {
         System.out.println("Init server, waiting for connections.");
         Thread t = new Thread(this);
         t.start();
-        while (true) {
-
-        }
-
     }
 
     @Override
@@ -46,6 +41,7 @@ public class ChatServer implements Runnable {
             ObjectInputStream is;
             try {
                 incomingSocket = serverSocket.accept();
+                ObjectOutputStream os = new ObjectOutputStream(incomingSocket.getOutputStream()); //not used, just let client move
                 is = new ObjectInputStream(incomingSocket.getInputStream());
                 String username = is.readObject().toString();
                 System.out.println("Got connection, name is " + username);
@@ -56,8 +52,7 @@ public class ChatServer implements Runnable {
                 }
                 currentUsers.add(new User(username, incomingSocket));
                 System.out.println("Added the user to the list of users.");
-            } catch (IOException ignored) {
-            } catch (ClassNotFoundException ignored) {
+            } catch (IOException | ClassNotFoundException ignored) {
             }
         }
     }
