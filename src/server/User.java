@@ -51,7 +51,6 @@ public class User implements Runnable {
                     case "M":
                         ChatServer.getCurrentUsers().forEach((u) -> {
                             //send the received message to everyone
-                            //System.out.println("[Message]" + receivedItems[1] + ": " + receivedItems[2]);
                             try {
                                 u.output.writeObject("M`" + receivedItems[1] + "`" + receivedItems[2]);
                                 u.output.reset();

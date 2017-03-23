@@ -87,7 +87,7 @@ public class ChatFrame extends JFrame implements Runnable {
                 System.out.println("Getting username.");
                 username = JOptionPane.showInputDialog("Please provide a valid, and unique username.");
             } catch (InputMismatchException e) {
-                System.out.println("Username is invalid.");
+                System.err.println("Username is invalid.");
                 continue;
             }
             //code to check if the username is already used
@@ -157,11 +157,8 @@ public class ChatFrame extends JFrame implements Runnable {
     }
 
     private void sendtxt_message() {
-        String m = userName + ": " + txt_message.getText();
-        txt_chatBox.append(m + "\n");
-        //todo send the message back to the server
         try {
-            output.writeObject(m);
+            output.writeObject("M`" + userName + "`" + txt_message.getText());
             txt_message.setText(""); //empty the chat box
         } catch (IOException e) {
             System.out.println("Failed to send message.");
@@ -175,6 +172,7 @@ public class ChatFrame extends JFrame implements Runnable {
         while (true) {
             try {
                 list_users.setListData(users.toArray()); //keep updated
+                repaint();
                 Object received = input.readObject();
                 if (received instanceof String) {
                     //System.out.println("Got message from server, " + received.toString());
