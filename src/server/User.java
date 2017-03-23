@@ -1,6 +1,7 @@
 package server;
 
 import java.io.*;
+import java.util.ArrayList;
 
 /**
  * This is a class to hold an active connection.
@@ -40,41 +41,65 @@ public class User implements Runnable {
 
     @Override
     public void run() {
-        try {
-            String received = input.readObject().toString();
+        ArrayList<User> usersToDrop = new ArrayList<>();
+        while (true) {
+            try {
+                String received = input.readObject().toString();
 
-            String[] receivedItems = received.split("[`]"); //creates an array with the type of message, user, and message
-            switch (receivedItems[0]) {
-                case "M":
-                    for (User u : ChatServer.getCurrentUsers()) {
-                        //send the received message to everyone
-                        System.out.println("[Message]" + receivedItems[1] + ": " + receivedItems[2]);
-                        u.output.writeObject("M`" + receivedItems[1] + "`" + receivedItems[2]);
-                        u.output.reset();
-                    }
-                    break;
-                case "L":
-                    for (User u : ChatServer.getCurrentUsers()) {
-                        //send the received message to everyone
-                        System.out.println("[Leave]" + receivedItems[1] + " left.");
-                        u.output.writeObject("L`" + receivedItems[1] + "`" + "none");
-                        u.output.reset();
-                    }
-                    break;
-                case "J":
-                    for (User u : ChatServer.getCurrentUsers()) {
-                        //send the received message to everyone
-                        System.out.println("[Join]" + receivedItems[1] + " joined.");
-                        u.output.writeObject("J`" + receivedItems[1] + "`" + "none");
-                        u.output.reset();
-                    }
-                    break;
-                default:
-                    break;
+                String[] receivedItems = received.split("[`]"); //creates an array with the type of message, user, and message
+                switch (receivedItems[0]) {
+                    case "M":
+                        ChatServer.getCurrentUsers().forEach((u) -> {
+                            //send the received message to everyone
+                            //System.out.println("[Message]" + receivedItems[1] + ": " + receivedItems[2]);
+                            try {
+                                u.output.writeObject("M`" + receivedItems[1] + "`" + receivedItems[2]);
+                                u.output.reset();
+                            } catch (IOException mes) {
+                                System.err.println("Unable to reach " + username + ", dropping.");
+                                //if it fails to send, invalid user
+                                usersToDrop.add(u);
+                            }
+                        });
+                        break;
+                    case "L":
+                        ChatServer.getCurrentUsers().forEach((u) -> {
+                            //send the received message to everyone
+                            try {
+                                u.output.writeObject("L`" + receivedItems[1] + "`" + "none");
+                                u.output.reset();
+                            } catch (IOException mes) {
+                                System.err.println("Unable to reach " + username + ", dropping.");
+                                //if it fails to send, invalid user
+                                usersToDrop.add(u);
+                            }
+                        });
+                        break;
+                    case "J":
+                        ChatServer.getCurrentUsers().forEach((u) -> {
+                            //send the received message to everyone
+                            try {
+                                u.output.writeObject("J`" + receivedItems[1] + "`" + "none");
+                                u.output.reset();
+                            } catch (IOException mes) {
+                                System.err.println("Unable to reach " + username + ", dropping.");
+                                //if it fails to send, invalid user
+                                usersToDrop.add(u);
+                            }
+                        });
+                        break;
+                    default:
+                        break;
+                }
+                usersToDrop.forEach((u) -> {
+                    ChatServer.getCurrentUsers().remove(u);
+                });
+            } catch (IOException | ClassNotFoundException ig) {
+                System.err.println("Unable to reach " + username + ", dropping.");
+                //if it fails to send, invalid user
+                ChatServer.getCurrentUsers().remove(ChatServer.resolveUserFromUsername(username));
+                break; //end the thread
             }
-        } catch (IOException | ClassNotFoundException ig) {
-            System.out.println("Unable to reach " + username + ", dropping.");
-            ChatServer.getCurrentUsers().remove(this); //if it fails to send, invalid user
         }
     }
 }

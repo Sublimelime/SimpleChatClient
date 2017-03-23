@@ -1,8 +1,7 @@
 package server;
 
 import java.io.*;
-import java.net.ServerSocket;
-import java.net.Socket;
+import java.net.*;
 import java.util.ArrayList;
 
 /**
@@ -48,6 +47,23 @@ public class ChatServer implements Runnable {
                 System.out.println("Got connection, name is " + username);
 
                 if (!currentUsers.isEmpty()) { //build a list of usernames and send it
+                    ArrayList<User> usersToDrop = new ArrayList<>();
+                    for (User u : currentUsers) {
+                        //tell all users that a user just joined
+                        try {
+                            u.getOutput().writeObject("J`" + username + "`" + "none");
+                            u.getOutput().reset();
+                        } catch (SocketException t) {
+                            System.err.println("Unable to reach " + u.getUsername() + ", dropping.");
+                            usersToDrop.add(u);
+                        }
+                    }
+                    System.out.println("Told all existing users about the new connection.");
+
+                    usersToDrop.forEach((u) -> { //drop all dead users
+                        currentUsers.remove(u);
+                    });
+
                     ArrayList<String> currentUsernames = new ArrayList<>();
                     currentUsers.forEach((u) -> {
                         currentUsernames.add(u.getUsername());
@@ -55,13 +71,6 @@ public class ChatServer implements Runnable {
                     os.writeObject(currentUsernames);
                     System.out.println("Sent list of users to new user.");
 
-                    for (User u : currentUsers) {
-                        //tell all users that a user just joined
-                        u.getOutput().writeObject("J`" + username + "`" + "none");
-                        u.getOutput().reset();
-                    }
-
-                    System.out.println("Told all existing users about the new connection.");
                 }
                 currentUsers.add(new User(username, is, os));
                 System.out.println("Added the user to the list of users.");
@@ -71,8 +80,17 @@ public class ChatServer implements Runnable {
         }
     }
 
-    public static ArrayList<User> getCurrentUsers() {
+    public synchronized static ArrayList<User> getCurrentUsers() {
         return currentUsers;
+    }
+
+    protected static User resolveUserFromUsername(String un) {
+        for (User u : currentUsers) {
+            if (u.getUsername().equals(un)) {
+                return u;
+            }
+        }
+        return null;
     }
 
 }

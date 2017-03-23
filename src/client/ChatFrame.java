@@ -104,7 +104,7 @@ public class ChatFrame extends JFrame implements Runnable {
         setSize(800, 800);
 
         users.add(userName); //add ourselves to the list
-        setTitle(username);
+        setTitle("Chat Client - " + username);
         try { //give the server our username
             output.writeObject(username);
         } catch (IOException e) {
