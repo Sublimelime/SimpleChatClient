@@ -55,10 +55,12 @@ public class ChatServer implements Runnable {
                     os.writeObject(currentUsernames);
                     System.out.println("Sent list of users to new user.");
 
-                    for (User u : currentUsers) { //tell all users that a user just joined
+                    for (User u : currentUsers) {
+                        //tell all users that a user just joined
                         u.getOutput().writeObject("J`" + username + "`" + "none");
                         u.getOutput().reset();
                     }
+
                     System.out.println("Told all existing users about the new connection.");
                 }
                 currentUsers.add(new User(username, is, os));

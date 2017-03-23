@@ -48,6 +48,7 @@ public class User implements Runnable {
                 case "M":
                     for (User u : ChatServer.getCurrentUsers()) {
                         //send the received message to everyone
+                        System.out.println("[Message]" + receivedItems[1] + ": " + receivedItems[2]);
                         u.output.writeObject("M`" + receivedItems[1] + "`" + receivedItems[2]);
                         u.output.reset();
                     }
@@ -55,6 +56,7 @@ public class User implements Runnable {
                 case "L":
                     for (User u : ChatServer.getCurrentUsers()) {
                         //send the received message to everyone
+                        System.out.println("[Leave]" + receivedItems[1] + " left.");
                         u.output.writeObject("L`" + receivedItems[1] + "`" + "none");
                         u.output.reset();
                     }
@@ -62,6 +64,7 @@ public class User implements Runnable {
                 case "J":
                     for (User u : ChatServer.getCurrentUsers()) {
                         //send the received message to everyone
+                        System.out.println("[Join]" + receivedItems[1] + " joined.");
                         u.output.writeObject("J`" + receivedItems[1] + "`" + "none");
                         u.output.reset();
                     }
@@ -69,7 +72,9 @@ public class User implements Runnable {
                 default:
                     break;
             }
-        } catch (IOException | ClassNotFoundException ignored) {
+        } catch (IOException | ClassNotFoundException ig) {
+            System.out.println("Unable to reach " + username + ", dropping.");
+            ChatServer.getCurrentUsers().remove(this); //if it fails to send, invalid user
         }
     }
 }

@@ -67,6 +67,7 @@ public class ChatFrame extends JFrame implements Runnable {
             }
         });
 
+        setResizable(false);
         //make connection and ping server
         System.out.println("Making connection...");
         try {
@@ -103,6 +104,7 @@ public class ChatFrame extends JFrame implements Runnable {
         setSize(800, 800);
 
         users.add(userName); //add ourselves to the list
+        setTitle(username);
         try { //give the server our username
             output.writeObject(username);
         } catch (IOException e) {
@@ -172,6 +174,7 @@ public class ChatFrame extends JFrame implements Runnable {
         //continually listen
         while (true) {
             try {
+                list_users.setListData(users.toArray()); //keep updated
                 Object received = input.readObject();
                 if (received instanceof String) {
                     //System.out.println("Got message from server, " + received.toString());
