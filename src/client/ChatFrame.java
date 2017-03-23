@@ -51,6 +51,22 @@ public class ChatFrame extends JFrame implements Runnable {
         this.txt_chatBox = new JTextArea();
         this.txt_message = new JTextArea();
         this.lbl_message = new JLabel("Enter Message:");
+
+        //setup close event
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent windowEvent) {
+                System.out.println("Closing.");
+                try {
+                    output.writeObject("L`" + userName + "`none");
+                } catch (IOException g) {
+                    System.err.println("Unable to send leaving message, sorry.");
+                    System.exit(0);
+                }
+                System.exit(0);
+            }
+        });
+
         //make connection and ping server
         System.out.println("Making connection...");
         try {
@@ -60,6 +76,9 @@ public class ChatFrame extends JFrame implements Runnable {
         } catch (UnknownHostException e) {
         } catch (IOException c) {
         }
+        Thread t = new Thread(this);
+        t.start();
+
         System.out.println("Made connection.");
         String username = "";
         while (username.isEmpty()) {
@@ -155,6 +174,7 @@ public class ChatFrame extends JFrame implements Runnable {
             try {
                 Object received = input.readObject();
                 if (received instanceof String) {
+                    //System.out.println("Got message from server, " + received.toString());
                     String[] receivedItems = received.toString().split("[`]"); //creates an array with the type of message, user, and message
                     switch (receivedItems[0]) {
                         case "J":
@@ -177,6 +197,7 @@ public class ChatFrame extends JFrame implements Runnable {
                     }
                 } else if (received instanceof ArrayList) {
                     users = (ArrayList<String>) received;
+                    users.add(userName); //add self, as it's not in there yet
                     list_users.setListData(users.toArray());
                 }
             } catch (IOException | ClassNotFoundException r) {
