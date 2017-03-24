@@ -124,7 +124,7 @@ public class ChatFrame extends JFrame implements Runnable {
         txt_chatBox.setEditable(false);
 
         txt_message.setBounds(20, 650, 600, 80);
-        lbl_message.setBounds(20, 630, 100, 20);
+        lbl_message.setBounds(20, 630, 200, 20);
 
         btn_send.setBounds(640, 650, 130, 30);
         btn_exit.setBounds(640, 700, 130, 30);
